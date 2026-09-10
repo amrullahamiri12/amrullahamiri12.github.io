@@ -21,7 +21,8 @@ export const site = {
   now: [
     'Building WiloSync with my co-founder and onboarding our first customers.',
     'Finishing my A.S. at Los Medanos, then transferring to San José State for the B.S. in Spring 2027.',
-    'Working through C++ this term, and learning the machine learning side properly rather than by osmosis.',
+    'Working through C++ this term.',
+    'Measuring how badly language models handle Pashto, and looking for the next thing to measure.',
   ],
 
   school: 'Los Medanos College',

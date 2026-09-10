@@ -1,0 +1,121 @@
+---
+title: The Pashto Tax
+summary: 'A measurement study: how much more it costs to use a language model in Pashto than in English, and why the penalty is not what you would guess.'
+role: 'Solo. Written in Python, by hand.'
+stack: ['Python', 'tiktoken', 'Hugging Face tokenizers', 'pandas', 'matplotlib', 'pytest']
+period: 'September 2026'
+status: 'shipped'
+repo: 'https://github.com/amrullahamiri12/pashto-tax'
+metrics:
+  - { value: '9', label: 'tokenizers compared' }
+  - { value: '1,012', label: 'aligned sentences' }
+  - { value: '3.8×', label: 'what Pashto costs on GPT-4' }
+  - { value: '55%', label: 'cut by GPT-4o' }
+order: 1
+caseStudy: true
+draft: false
+---
+
+import Figure from '../../components/Figure.astro';
+import tokenizers from '../../assets/work/pashto-tax/tokenizers.png';
+import siblings from '../../assets/work/pashto-tax/script-siblings.png';
+
+## The problem
+
+Commercial language models bill by the token and measure their context window in
+tokens. So the way a tokenizer cuts up your language is not a technical detail — it
+decides what you pay and how much the model can hold at once.
+
+Everyone in the field knows this penalises low-resource languages. I wanted the number
+for mine.
+
+I grew up speaking Pashto. Before I wrote software I spent years interpreting between
+Pashto and English for hospitals, courts and 911 dispatchers. That is the position this
+question comes from: not "which languages are underserved" in the abstract, but what it
+costs the people I used to interpret for.
+
+## What I built
+
+A benchmark over FLORES-200 — a corpus professionally translated and sentence-aligned
+across two hundred languages, which is what makes the comparison fair. Every language is
+expressing the same 1,012 sentences, so a difference in token counts is a difference in
+encoding rather than in content. Nine tokenizers, nine languages.
+
+The result, on the same content:
+
+|  | English | Pashto |
+| --- | --- | --- |
+| Tokens (GPT-3.5 / GPT-4) | 27,182 | **102,084** |
+| Cost per million words | $3.10 | **$9.66** |
+| Sentences in a 128k context | 4,765 | **1,268** |
+
+<Figure
+  src={tokenizers}
+  alt="Horizontal bar chart of tokens needed relative to English, by tokenizer, for Pashto."
+  caption="Fig. 1 — The same 1,012 sentences, relative to English."
+  wide
+/>
+
+The clearest version is one word. In English *woman* is **one token**. In Pashto **ښځه**
+— the same word, three characters — is **five**.
+
+## The hardest part
+
+The measurement was easy. The interesting work was the follow-up question: **why?**
+
+The obvious answer is the writing system. Pashto uses the Perso-Arabic alphabet, and
+byte-level tokenizers built mostly on English are known to handle non-Latin scripts
+badly. If that were the whole story, Pashto, Persian, Urdu and Arabic would fare alike.
+
+They don't — and BLOOM makes the reason legible. BLOOM was trained on 46 languages.
+Urdu is one of them. Pashto is not.
+
+<Figure
+  src={siblings}
+  alt="Grouped bars comparing Pashto, Urdu and Persian across four multilingual tokenizers."
+  caption="Fig. 2 — Same alphabet, same tokenizer, 85% more tokens."
+  wide
+/>
+
+To isolate it properly I split Pashto's own vocabulary in two: words containing the
+letters Pashto does not share with its neighbours — ټ ډ ړ ږ ښ ګ ڼ ځ څ ۍ — and words
+without them. If the script were the problem, both halves would cost the same.
+
+| Tokenizer | Covers Pashto | Penalty on Pashto-only letters |
+| --- | --- | --- |
+| BLOOM | no | **1.48×** |
+| GPT-3.5 / GPT-4 | not by design | 1.23× |
+| GPT-4o | not by design | 1.09× |
+| XLM-RoBERTa | yes | **0.92×** — none at all |
+
+The cost lands precisely on the letters a tokenizer never learns if no Pashto was in its
+training data. It is not the alphabet. It is who was invited.
+
+Two things surprised me. **GPT-4o's tokenizer cut Pashto by 55%** — 102,084 tokens down
+to 46,064 for identical content. Whatever changed between `cl100k` and `o200k` was worth
+real money to speakers of languages like mine. And **a bigger vocabulary is not
+automatically a fairer one**: Mistral's 32k vocabulary is the worst here at 4.30×, but
+BLOOM's 250k still charges Pashto 2.51× while XLM-RoBERTa's 250k charges 1.34×. What
+matters is which languages the vocabulary was built to cover.
+
+## What I would not claim
+
+Token counts are not model quality. A tokenizer that fragments a language less is not
+thereby better at understanding it, and I have tested nothing about comprehension,
+generation or translation. The claim is narrow and economic: for the same sentence,
+Pashto costs more tokens, and tokens are what you are billed for.
+
+Fertility here is tokens per whitespace-delimited word — a blunt measure, and
+deliberately the same blunt measure for every language. The ratios are computed on
+identical content, so they don't depend on how words are counted.
+
+FLORES covers Southern Pashto (`pbt_Arab`). Northern Pashto has orthographic
+differences this doesn't capture.
+
+## What's next
+
+An evaluation set. Token counts say what the language costs; they say nothing about
+what the models get *wrong*. The version of this I want to build next is Pashto–English
+pairs from the domains I actually interpreted in — medical intake, court proceedings,
+emergency dispatch — where a mistranslation has a consequence. That is a harder problem
+and a more useful one, and building it is the part nobody can do for me.
