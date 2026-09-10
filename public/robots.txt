@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://amrullahamiri12.github.io/sitemap-index.xml
+Sitemap: https://portfolio-amrullah-amiri-s-projects.vercel.app/sitemap-index.xml
