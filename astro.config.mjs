@@ -4,9 +4,10 @@ import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// TODO: replace with the real domain before deploy — sitemap + canonical URLs depend on it.
+// Change `site` when a custom domain is ready — canonical URLs, the sitemap and the
+// OG image URL are all derived from it.
 export default defineConfig({
-  site: 'https://amrullahamiri.com',
+  site: 'https://amrullahamiri12.github.io',
   integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/specimen') })],
   vite: { plugins: [tailwindcss()] },
   markdown: {
