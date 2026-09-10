@@ -12,9 +12,12 @@ const contact = [site.location, site.email, 'github.com/amrullahamiri12', 'linke
     <header class="col-wide">
       <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
         <h1 class="display text-4xl">{site.name}</h1>
-        <p class="label print:hidden">
+        <p class="label flex flex-wrap gap-x-6 gap-y-2 print:hidden">
+          <a class="transition-colors duration-200 hover:text-accent" href="/amrullah-amiri-resume.pdf" download>
+            Download PDF &rarr;
+          </a>
           <button type="button" data-print class="cursor-pointer hover:text-accent">
-            Print / save as PDF &rarr;
+            Print &rarr;
           </button>
         </p>
       </div>

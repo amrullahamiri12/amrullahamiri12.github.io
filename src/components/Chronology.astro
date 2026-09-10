@@ -1,0 +1,22 @@
+---
+import { chronology } from '../lib/chronology';
+---
+
+<ol class="mt-8">
+  {
+    chronology.map((era) => (
+      <li
+        class:list={[
+          'grid grid-cols-[3.5rem_1fr] gap-x-5 border-t border-rule py-5 sm:grid-cols-[4.5rem_1fr] sm:gap-x-8',
+          era.pivot && 'border-t-ink',
+        ]}
+      >
+        <div>
+          <span class="label block text-ink">{era.year}</span>
+          {era.place !== '—' && <span class="label mt-1 block">{era.place}</span>}
+        </div>
+        <p class:list={['text-ink-soft', era.pivot && 'text-ink']}>{era.what}</p>
+      </li>
+    ))
+  }
+</ol>

@@ -16,7 +16,7 @@ export const getStaticPaths = (async () => {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, summary, role, stack, period, status, repo, live } = entry.data;
+const { title, summary, role, stack, period, status, repo, live, metrics } = entry.data;
 
 // Neighbours for the footer, in the same order the index shows them.
 const all = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
@@ -40,6 +40,19 @@ const links = [
       </h1>
 
       <p class="measure mt-6 text-lg text-ink-soft italic">{summary}</p>
+
+      {
+        metrics && metrics.length > 0 && (
+          <dl class="mt-10 flex flex-wrap gap-x-12 gap-y-6 border-t border-rule pt-6">
+            {metrics.map((m) => (
+              <div>
+                <dt class="display text-3xl">{m.value}</dt>
+                <dd class="label mt-1">{m.label}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
 
       <dl class="mt-10 grid gap-x-10 gap-y-5 border-t border-rule pt-6 sm:grid-cols-2">
         <div>

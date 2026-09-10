@@ -17,6 +17,8 @@ const work = defineCollection({
     live: z.string().url().optional(),
     /** Lower sorts first on the index. */
     order: z.number().default(99),
+    /** Concrete figures shown on the case study header. Specifics convert. */
+    metrics: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
     /** True once the case study is written; until then the index row links out. */
     caseStudy: z.boolean().default(false),
     draft: z.boolean().default(false),

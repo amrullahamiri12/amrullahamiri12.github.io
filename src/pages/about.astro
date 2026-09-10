@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { site } from '../lib/site';
 import { languages, disclosure } from '../lib/resume';
+import Chronology from '../components/Chronology.astro';
 ---
 
 <Base title="About — Amrullah Amiri">
@@ -48,7 +49,15 @@ import { languages, disclosure } from '../lib/resume';
       </p>
     </div>
 
-    <section class="measure mt-14 border-t border-rule pt-8">
+    <section class="col-wide mt-16">
+      <h2 class="label">Chronology</h2>
+      <p class="measure mt-3 text-muted italic">
+        Eleven jobs, four cities, three languages, one degree in progress.
+      </p>
+      <Chronology />
+    </section>
+
+    <section class="measure mt-16 border-t border-rule pt-8">
       <h2 class="label">How these were built</h2>
       <div class="mt-4 space-y-5">
         {disclosure.split('\n\n').map((para) => <p>{para}</p>)}

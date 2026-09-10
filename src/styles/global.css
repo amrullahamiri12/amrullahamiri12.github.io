@@ -372,11 +372,10 @@
     display: none !important;
   }
 
-  /* The running head keeps the name but loses its rule and padding. */
+  /* The running head is dropped entirely: every printable page already carries
+     its own title, so it only duplicated the heading below it. */
   body > header {
-    border: 0 !important;
-    padding: 0 !important;
-    margin-bottom: 6mm;
+    display: none !important;
   }
 
   /* The margin column has nowhere to hang on paper — fold it into the text. */
