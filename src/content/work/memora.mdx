@@ -14,36 +14,68 @@ metrics:
   - { value: 'CI', label: 'Vitest on every push' }
 order: 3
 draft: false
-caseStudy: false
+caseStudy: true
 ---
-
-{/* Frontmatter above is pulled from your README and is accurate. Everything below is
-    a prompt for you — I'm not going to invent your reasoning. */}
 
 ## The problem
 
-TODO — what was actually broken or missing, in plain language. Why build another
-flashcard app when Quizlet exists?
+Building another flashcard app is not an original idea. I built this one because I wanted
+the whole path — accounts, a database, an admin side, a real deployment, tests that run on
+every push — rather than another exercise that stops at the edge of my laptop.
+
+The feature I actually wanted was the one study apps are weakest at: not "how many cards
+have you seen" but "which cards do you still not know."
 
 ## What I built
 
-TODO — the shape of it. Three study modes, guest and registered accounts, an admin
-dashboard. Say what mattered and skip the feature list.
+Three study modes over the same deck. **Flashcards** for recall with a self-rating,
+**Learn** for graded practice across multiple choice, true/false and fill-in-the-blank,
+and **Test** for a timed run. Progress, streaks and a seven-day activity calendar sit on
+the dashboard.
+
+Behind it there is a full admin side, which is the part I underestimated. Subjects,
+topics, cards and users are all editable, bulk import and export run through CSV, and
+deleting a user is a soft delete so it can be undone. A study app is only pleasant if
+somebody can fix a typo in a deck of four hundred cards without touching the database.
+
+You can start as a guest and register later. Accounts use JWT with bcrypt, email
+verification through Resend, and Google OAuth. Auth routes are rate limited to 40 requests
+per fifteen minutes per IP, and progress writes to 150 a minute — a study session is
+bursty, but not that bursty.
 
 ## The hardest part
 
-TODO — **this is the section that gets you hired.** Your README points at a real one:
-you run Prisma on Vercel's serverless functions and added raw SQL fast paths for hot
-routes. That's a genuine engineering problem — cold starts, connection pooling, an ORM
-that's expensive in a function that dies after every request.
+**Prisma is expensive in a function that dies after every request.**
 
-What did you measure? What was slow, how slow, and how did you find out? What did you
-try before raw SQL? What did dropping to raw SQL cost you in safety or maintainability?
+Memora runs as a static client plus a serverless Express API on Vercel. That model is
+excellent until an ORM is involved. Prisma has to initialise its client and establish a
+database connection on a cold start, and in a serverless function there is no long-lived
+process to amortise that against. The routes that suffer are exactly the ones that get hit
+constantly — loading a session's cards, writing progress after every answer.
 
-Other candidates if that isn't the real story: email verification gating study writes,
-rate limiting (40 req/15min on auth, 150/min on progress), or the SQLite-to-Postgres
-migration.
+The fix was to stop using the ORM everywhere. Hot routes drop to raw SQL against the same
+schema; everything else — the admin CRUD, anything shaped like a form — stays on Prisma,
+where the type safety is worth more than the milliseconds.
+
+The honest cost is that the codebase now has two ways to talk to the database, and a
+schema change has to be applied in both. That is a maintenance tax I took on deliberately
+on a small project. On a larger one I would want a stronger boundary between them than
+"remember to check."
+
+The other decision worth naming is the database itself: SQLite locally, Postgres in
+production. That is a real risk — the two are not the same database, and it is possible to
+write something that works on one and not the other. I kept it because starting with a
+file and no running service made the project easy to pick up on any machine, and I
+migrate through Prisma so the schema stays one definition.
 
 ## What I'd change
 
-TODO — what you now know that you didn't in June.
+I would put the spaced repetition in. The app tracks which cards are weak and can filter a
+session down to them, but that is not a scheduling algorithm — it is a filter. The
+interesting version of this problem is predicting *when* a card is about to be forgotten,
+which is a modelling problem rather than a CRUD one, and it is the reason this project
+still interests me.
+
+I would also test the serverless path properly. The CI runs unit tests and API smoke
+tests, which is more than most student projects have, but cold starts are exactly the
+thing that never shows up in a test suite running on a warm machine.

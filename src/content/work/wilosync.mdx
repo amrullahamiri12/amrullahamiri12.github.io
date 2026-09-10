@@ -12,30 +12,62 @@ metrics:
   - { value: 'Live', label: 'with customers' }
 order: 1
 draft: false
-caseStudy: false
+caseStudy: true
 ---
 
 ## The problem
 
-TODO — leads going unanswered, reminders not sent, data copied by hand between tools.
-You've picked security and cleaning companies specifically. Why them?
+Small service businesses lose money in the gaps between their tools. A lead arrives by
+email and nobody answers it for two days. An appointment is booked and the reminder is
+never sent. An invoice goes out and the follow-up depends on somebody remembering. The
+work that gets dropped is never the skilled work — it is the administrative connective
+tissue around it.
+
+These businesses already own the software. They have Gmail, a calendar, QuickBooks, maybe
+a CRM. What they do not have is anyone to wire it together, and they are far too small to
+hire someone who could.
 
 ## What I built
 
-TODO — the workflow engine, the integrations, the AI lead screening.
+WiloSync connects the tools a company already uses and runs the repetitive work between
+them: capturing and screening inbound leads, sending appointment and payment reminders,
+requesting reviews after a job, and pulling the day's outstanding items into a single
+digest. It reaches across roughly twenty integrations — Gmail, Slack, HubSpot, Google
+Sheets, Calendly, QuickBooks, Stripe among them.
+
+We aimed it at security and cleaning companies first. Both are appointment-based, both run
+on thin margins, and in both a missed reminder is not an inconvenience — it is a crew
+arriving somewhere nobody is expecting them.
+
+Setup is not self-serve by default. A customer can buy a workflow build outright, and
+pricing runs from a free single workflow up through tiers by workflow count. That is a
+deliberate choice about who the customer is: the owner of a twelve-person cleaning company
+does not want a canvas and a node editor. They want the thing to already work.
 
 ## The hardest part
 
-TODO — **the section that gets you hired.** This one is different from the others: it
-has customers and a price list, so the hard parts are probably not only technical.
-Candidates:
+**Screening a lead with a model means being wrong about a real person's enquiry.**
 
-- **The AI screening step.** What model, what prompt, and what happens when it is wrong
-  about a real lead? That is the most interesting question on this whole site.
-- **Integrating twenty-odd third-party APIs** that each fail differently.
-- **Reliability.** A missed reminder is a broken promise to someone's customer.
-- **Deciding what to charge**, and what a "workflow" is such that 5 of them is $39.
+Lead screening is the piece customers care about most and the piece that carries the most
+risk. A classifier that files a genuine enquiry as noise costs a business a job they never
+learn they lost — a silent false negative, the worst kind, because nothing surfaces to tell
+anyone the system failed.
+
+That asymmetry is the thing I hold onto. Screening should rank and route, never discard —
+the two error directions are not equally expensive, so the system should not treat them as
+though they are. An owner who occasionally sees a junk enquiry keeps trusting the tool. An
+owner who discovers it swallowed a real customer will not, and would be right not to.
+
+The second hard part is that twenty integrations means twenty different failure modes.
+Third-party APIs rate limit, expire tokens, change response shapes, and go down. A workflow
+that a customer is depending on cannot fail silently when one of them does, which means
+retries, token refresh, and making the difference between "not sent yet" and "will never
+be sent" visible.
 
 ## What I'd change
 
-TODO
+The screening should be measured, not just built. Right now I can say it works; I cannot
+put a number on how often it is wrong, or in which direction. That needs a labelled set of
+real enquiries and an evaluation that runs on every change — which is the difference
+between shipping a feature that uses a model and actually doing machine learning. It is
+the next thing I want to get right.

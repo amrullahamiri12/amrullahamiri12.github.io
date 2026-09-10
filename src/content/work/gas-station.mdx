@@ -22,7 +22,7 @@ metrics:
   - { value: '55', label: 'migrations' }
 order: 2
 draft: false
-caseStudy: false
+caseStudy: true
 ---
 
 import Figure from '../../components/Figure.astro';
@@ -30,58 +30,103 @@ import upload from '../../assets/work/gas-station/03-upload.png';
 import review from '../../assets/work/gas-station/02-review.png';
 import validation from '../../assets/work/gas-station/04-validation.png';
 
-{/* Frontmatter is drawn from your README and the repo itself — it's accurate.
-    The prose below is a prompt for you. */}
-
 ## The problem
 
-TODO — you have the rarest possible qualification to write this section: you did this
-job. Say what a daily close actually is, what doing it by hand costs, and what goes
-wrong. Write it for someone who has never seen a station's paperwork.
+A gas station closes out once a day. The point-of-sale prints a Daily Close Report and
+somebody has to prove it balances: fuel plus store plus tax minus discounts should equal
+the grand total, the payment methods should add up to the same number a second way, and
+the cash that actually went into the safe should match what the register says was owed.
+
+I did this job. Before I wrote any of this I spent two years as an accountant owning
+month-end close, and a daily close is the small version of that — the same reconciliation,
+every day, per station, on paper. The failure mode is not that it is hard. It is that it
+is repetitive, and repetitive work gets skimmed. A number typed into the wrong column in
+July is found in October by somebody reading a bank statement.
+
+Everything downstream depends on it. If the daily numbers are wrong, the month is wrong,
+and the tax filing built on the month is wrong.
 
 ## What I built
 
-TODO — upload, extract, review beside the PDF, correct with an audit trail, resolve
-blocking validations, approve. Only approved reports move the dashboard.
-
-{/* Screenshots are real, captured from the running app against a seeded demo
-    company — no customer data. */}
+Upload the day's PDF. The app pulls the values out, shows them next to the document they
+came from, and refuses to approve the report until it balances. Corrections are recorded
+with who made them. Only approved reports reach the dashboard, so nothing provisional ever
+becomes a number somebody reports on.
 
 <Figure
   src={upload}
   alt="The upload screen, offering a POS export or a Store Close PDF."
-  caption="Fig. 1 — Upload. XML, CSV or JSON from the POS; PDF as the fallback."
+  caption="Fig. 1 — XML, CSV or JSON from the POS; PDF as the fallback."
   wide
 />
 
 <Figure
   src={review}
   alt="The review screen: extracted values on the left, the source PDF on the right."
-  caption="Fig. 2 — Review. Every extracted value sits beside the document it came from."
+  caption="Fig. 2 — Every extracted value sits beside the document it came from."
   wide
 />
+
+Underneath it is a multi-tenant system: an operator role above companies, an admin inside
+one, then area managers, station managers and viewers. Getting that boundary wrong would
+show one company another company's revenue, so it is enforced at the data layer rather
+than in the UI.
+
+## The hardest part
+
+**I decided the parser would not be a model.**
+
+Extraction is rules — section detection, field matchers, value normalizers, and a mapper,
+with separate parsers for the formats I actually see. It would have been faster to hand
+the PDF to an LLM and ask for JSON.
+
+The reason I didn't is that this is not a summarization problem. It is an arithmetic
+problem with a right answer. A model that reads a Daily Close correctly 97% of the time
+is wrong about three closes a quarter, and it is wrong *quietly* — a plausible number in
+a plausible field. Somebody would find it in an audit. A rules parser that doesn't
+recognise a format fails loudly instead, and the app falls back to manual entry.
+
+The cost is real. Every new POS format is work — a new parser, not a new prompt. I
+accepted that trade because in this domain a wrong number is worse than a missing one.
+
+The same instinct runs through the money handling. Nothing is a float. Every amount is a
+`Decimal` at 28 digits, rounding half-up, and the parser understands that `(1,234.56)`
+means negative because that is what parentheses mean on an accounting statement.
+
+What actually enforces the balance is a validation engine — a set of named rules,
+each with a severity:
+
+- `FUEL_GALLONS_X_PRICE` — gallons times price should equal fuel sales
+- `FUEL_PLUS_STORE_VS_TOTAL` — the components should reconstruct the grand total
+- `EXPECTED_VS_ACTUAL_CASH` and `CASH_OVER_SHORT` — what should be in the safe versus what is
+- `CARWASH_DOUBLE_COUNT` — car wash counted once, not inside *and* beside store sales
+- `DUPLICATE_DATE`, `MISSING_REPORT_DATES` — the days themselves have to be accounted for
 
 <Figure
   src={validation}
   alt="The validation panel showing two blocking errors and a warning, each with an override."
-  caption="Fig. 3 — Validation. Errors block approval; every override is recorded."
+  caption="Fig. 3 — Errors block approval. Every override is recorded against a person."
   wide
 />
 
-## The hardest part
+Then the question that took longest: **how close is close enough?** Cash never ties to the
+cent. Set the tolerance too tight and every report is a false alarm, and people learn to
+click through warnings — which is worse than having none. Too loose and real errors pass.
 
-TODO — **the section that gets you hired.** Candidates, all real, pick one:
+I settled on a dollar for currency, a tenth of a gallon for volume, and 5% as a warning
+threshold, all configurable per deployment, because that number is a business decision
+wearing an engineering costume. It should not be a constant compiled into the app.
 
-- **You chose deterministic parsing over AI, on purpose.** Your README says so
-  explicitly. That's a judgement call worth defending: why a rules engine beats a model
-  when a number has to be right, and what it cost you in flexibility.
-- **The domain model is 59 tables** — tanks, deliveries, card settlement batches, tax
-  mapping rules, monthly reconciliation. How did you keep that from collapsing?
-- **Validation tolerances.** Deciding when totals are "close enough" is a business
-  question wearing an engineering costume.
-- **Multi-tenant roles** — operator above companies, admin within one, plus area and
-  station managers. Getting that wrong leaks one company's numbers to another.
+Overrides exist for the same reason. A manager who knows why a day is odd can approve it —
+and the override is written down with their name on it.
 
 ## What I'd change
 
-TODO
+The domain model grew to 59 tables, which is honest to the problem — tanks, deliveries,
+card settlement batches, tax mapping rules, monthly reconciliation — but I would introduce
+the mapping-rule tables earlier rather than retrofitting them. Fifty-five migrations is
+the record of learning that in public.
+
+I would also add OCR. Right now a scanned PDF with no text layer goes to manual entry.
+Extraction is modular specifically so OCR can drop in behind it, and I left that seam
+deliberately — but it is still a gap.
