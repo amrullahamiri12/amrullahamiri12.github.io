@@ -20,6 +20,11 @@ draft: false
 caseStudy: false
 ---
 
+import Figure from '../../components/Figure.astro';
+import upload from '../../assets/work/gas-station/03-upload.png';
+import review from '../../assets/work/gas-station/02-review.png';
+import validation from '../../assets/work/gas-station/04-validation.png';
+
 {/* Frontmatter is drawn from your README and the repo itself — it's accurate.
     The prose below is a prompt for you. */}
 
@@ -33,6 +38,30 @@ wrong. Write it for someone who has never seen a station's paperwork.
 
 TODO — upload, extract, review beside the PDF, correct with an audit trail, resolve
 blocking validations, approve. Only approved reports move the dashboard.
+
+{/* Screenshots are real, captured from the running app against a seeded demo
+    company — no customer data. */}
+
+<Figure
+  src={upload}
+  alt="The upload screen, offering a POS export or a Store Close PDF."
+  caption="Fig. 1 — Upload. XML, CSV or JSON from the POS; PDF as the fallback."
+  wide
+/>
+
+<Figure
+  src={review}
+  alt="The review screen: extracted values on the left, the source PDF on the right."
+  caption="Fig. 2 — Review. Every extracted value sits beside the document it came from."
+  wide
+/>
+
+<Figure
+  src={validation}
+  alt="The validation panel showing two blocking errors and a warning, each with an override."
+  caption="Fig. 3 — Validation. Errors block approval; every override is recorded."
+  wide
+/>
 
 ## The hardest part
 
