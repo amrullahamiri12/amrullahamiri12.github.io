@@ -9,11 +9,10 @@ export const site = {
     'I spent ten years doing the work that software was supposed to make easier. Now I build the software.',
   tagline: 'I build things that have to work on Monday morning.',
 
-  /** TODO(amrullah): confirm both lines — I will not state your work authorisation for you. */
   looking: {
     what: 'a summer 2027 internship in machine learning',
     where: 'Bay Area or remote',
-    authorisation: 'TODO — e.g. "Authorised to work in the US" if that is accurate. Delete this line otherwise.',
+    authorization: 'Authorized to work in the US',
   },
   description:
     'Amrullah Amiri — computer science student in Concord, California, working toward AI and machine learning. Selected work, notes, and a résumé.',

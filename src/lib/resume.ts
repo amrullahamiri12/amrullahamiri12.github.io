@@ -83,7 +83,7 @@ export const experience = [
     to: 'February 2023',
     place: 'Lafayette, California',
     notes: [
-      'Full-cycle AP: high-volume invoice entry, coding to cost centres, check runs and discrepancy resolution.',
+      'Full-cycle AP: high-volume invoice entry, coding to cost centers, check runs and discrepancy resolution.',
     ],
   },
   {
@@ -123,7 +123,7 @@ export const experience = [
   },
   {
     org: 'Etisalat Afghanistan',
-    title: 'Call Centre Representative',
+    title: 'Call Center Representative',
     from: 'October 2015',
     to: 'July 2016',
     place: 'Kabul, Afghanistan',

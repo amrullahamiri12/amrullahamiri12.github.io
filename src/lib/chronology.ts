@@ -15,12 +15,12 @@ export const chronology: Era[] = [
   {
     year: '2014',
     place: 'Kabul',
-    what: 'Admin and finance assistant at a relief and skills-development organisation. My first ledgers.',
+    what: 'Admin and finance assistant at a relief and skills-development organization. My first ledgers.',
   },
   {
     year: '2015',
     place: 'Kabul',
-    what: 'Call centre representative at Etisalat Afghanistan.',
+    what: 'Call center representative at Etisalat Afghanistan.',
   },
   {
     year: '2016',
