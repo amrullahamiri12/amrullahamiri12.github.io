@@ -1,11 +1,11 @@
 ---
-title: The Pashto Tax
-summary: 'A measurement study: how much more it costs to use a language model in Pashto than in English, and why the penalty is not what you would guess.'
+title: The Letters Nobody Trained On
+summary: 'Pashto uses ten letters no other major language uses. A study of nine tokenizers finds that almost the entire cost of using a language model in Pashto lands on exactly those ten.'
 role: 'Solo. Written in Python, by hand.'
 stack: ['Python', 'tiktoken', 'Hugging Face tokenizers', 'pandas', 'matplotlib', 'pytest']
 period: 'September 2026'
 status: 'shipped'
-repo: 'https://github.com/amrullahamiri12/pashto-tax'
+repo: 'https://github.com/amrullahamiri12/pashto-tokenizers'
 metrics:
   - { value: '9', label: 'tokenizers compared' }
   - { value: '1,012', label: 'aligned sentences' }
@@ -17,8 +17,8 @@ draft: false
 ---
 
 import Figure from '../../components/Figure.astro';
-import tokenizers from '../../assets/work/pashto-tax/tokenizers.png';
-import siblings from '../../assets/work/pashto-tax/script-siblings.png';
+import tokenizers from '../../assets/work/pashto-letters/tokenizers.png';
+import siblings from '../../assets/work/pashto-letters/script-siblings.png';
 
 ## The problem
 
