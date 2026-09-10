@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/site';
+import { languages, disclosure } from '../lib/resume';
+---
+
+<Base title="About — Amrullah Amiri">
+  <div class="editorial pt-16 pb-8">
+    <h1 class="display text-4xl">About</h1>
+
+    {/* TODO(amrullah): draft copy, accurate but written in my voice, not yours.
+        Rewrite it — this page is you introducing yourself. */}
+    <div class="measure mt-10 space-y-5">
+      <p>
+        I&rsquo;m a {site.role.toLowerCase()} at {site.school} in {site.location}, finishing
+        in {site.graduates}. I&rsquo;m heading toward {site.focus}, and I came to all of
+        it late.
+      </p>
+      <p>
+        Before this I spent about a decade doing other work. I grew up in Afghanistan and
+        worked in Kabul and Kandahar &mdash; a call centre, then supervising accounts for
+        a trading group. I spent two years as a linguist with Mission Essential in Bagram.
+        After I came to California I interpreted Pashto and English over the phone for
+        hospitals, courts and 911 dispatchers, which is a strange and clarifying job: you
+        are the only reason two people in a room can understand each other, and you get
+        no second take.
+      </p>
+      <p>
+        Then I did accounting. Two years owning month-end close at a company in Lafayette
+        &mdash; AP and AR, reconciliations, the general ledger, the audit trail. That is
+        where I met the software I now write. Most of it was bad in a specific way: it
+        was built by people who had never had to close a month with it.
+      </p>
+      <p>
+        So that&rsquo;s the thing I&rsquo;m actually for. I like problems where a number
+        has to be right, where somebody downstream is depending on it, and where the
+        boring path &mdash; validation, an audit trail, a test &mdash; is the interesting
+        one. My best project is a reporting system for gas stations, which sounds like
+        nothing until you have been the person reconciling the paperwork.
+      </p>
+      <p>
+        I speak three languages and I have been the person on the wrong side of a
+        language barrier, which is most of why machine learning interests me at all.
+      </p>
+      <p>
+        I finish my associate&rsquo;s at Los Medanos in December 2026 and transfer to
+        San&nbsp;José State for the B.S. in Spring 2027.
+      </p>
+    </div>
+
+    <section class="measure mt-14 border-t border-rule pt-8">
+      <h2 class="label">How these were built</h2>
+      <div class="mt-4 space-y-5">
+        {disclosure.split('\n\n').map((para) => <p>{para}</p>)}
+      </div>
+    </section>
+
+    <section class="col-side mt-12 lg:mt-0">
+      <h2 class="label">Now</h2>
+      <ul class="mt-3 space-y-3 text-sm text-muted">
+        {site.now.map((item) => <li>{item}</li>)}
+      </ul>
+
+      <h2 class="label mt-10">Languages</h2>
+      <dl class="mt-3 space-y-2 text-sm">
+        {
+          languages.map((lang) => (
+            <div>
+              <dt class="inline text-ink-soft">{lang.name}</dt>
+              <dd class="inline text-muted"> &mdash; {lang.level}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+  </div>
+</Base>

@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const notes = (await getCollection('notes'))
+  .filter((entry) => import.meta.env.DEV || !entry.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base title="Notes — Amrullah Amiri">
+  <section class="editorial pt-16 pb-24">
+    <h1 class="display text-4xl">Notes</h1>
+
+    {
+      notes.length === 0 ? (
+        <p class="measure mt-8 text-muted italic">
+          Nothing published yet. Drop a <code class="font-mono text-sm">.mdx</code> file into
+          <code class="font-mono text-sm"> src/content/notes/</code> and it appears here.
+        </p>
+      ) : (
+        <ol class="mt-8">
+          {notes.map((note) => (
+            <li class="border-t border-rule last:border-b">
+              <a href={`/notes/${note.id}`} class="group block py-6">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  <h2 class="display text-2xl transition-colors duration-200 group-hover:text-accent">
+                    {note.data.title}
+                  </h2>
+                  <span class="label shrink-0">{fmt.format(note.data.pubDate)}</span>
+                </div>
+                <p class="mt-2 max-w-prose text-ink-soft">{note.data.description}</p>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )
+    }
+  </section>
+</Base>

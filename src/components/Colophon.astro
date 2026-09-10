@@ -1,0 +1,38 @@
+---
+import { site } from '../lib/site';
+
+// Evaluated once at build time — the date is baked into the HTML, not read at runtime.
+const revised = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date());
+---
+
+<footer class="editorial mt-32 border-t border-rule pt-10 pb-16">
+  <div class="measure space-y-6">
+    <h2 class="label">Colophon</h2>
+
+    <!-- Inline elements stay on one source line: Astro collapses the whitespace
+         around a newline, which silently glues words to the next tag. -->
+    <p class="text-sm text-muted">
+      Set in <span class="text-ink-soft">Fraunces</span> and <span class="text-ink-soft">Newsreader</span>, with <span class="text-ink-soft">IBM&nbsp;Plex&nbsp;Mono</span> for labels. Built with Astro and Tailwind, typeset in HTML. No trackers, no cookies. Last revised {revised}.
+    </p>
+
+    <ul class="flex flex-wrap gap-x-6 gap-y-2">
+      {
+        site.links.map((link) => (
+          <li>
+            <a
+              class="label transition-colors duration-200 hover:text-accent"
+              href={link.href}
+              rel={link.href.startsWith('http') ? 'me noopener' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>

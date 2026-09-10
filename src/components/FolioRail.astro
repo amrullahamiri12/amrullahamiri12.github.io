@@ -1,0 +1,19 @@
+---
+/**
+ * A running section marker set like a folio in a printed book. Sits in the outer
+ * margin, sticks while you read, and is absent entirely on narrow screens, where
+ * there is no margin for it to hang in.
+ *
+ * Visibility is driven by data-state so it never fights the responsive display
+ * utilities: 'before' (above the first heading) and 'none' (nothing to track)
+ * both fade it out; 'active' shows it.
+ */
+---
+
+<aside data-folio data-state="before" aria-hidden="true" class="col-side row-1 hidden lg:block">
+  <div class="folio-inner sticky top-32">
+    <span class="label block" data-folio-number>01</span>
+    <span class="mt-2 block h-px w-8 bg-accent"></span>
+    <span class="mt-2 block font-display text-lg leading-snug" data-folio-title></span>
+  </div>
+</aside>

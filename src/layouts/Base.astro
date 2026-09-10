@@ -1,0 +1,112 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Masthead from '../components/Masthead.astro';
+import Colophon from '../components/Colophon.astro';
+import { site } from '../lib/site';
+import '../styles/global.css';
+
+// Preloaded so the swap happens before first paint rather than reflowing the
+// body copy afterwards. Only the two faces every page uses immediately.
+import frauncesUrl from '@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2?url';
+import newsreaderUrl from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** The home page prints its own name at full size; its running head omits it. */
+  showName?: boolean;
+  /** Internal pages that shouldn't appear in search results or the sitemap. */
+  noindex?: boolean;
+}
+
+const { title, description = site.description, showName = true, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: Astro.site?.toString(),
+  email: `mailto:${site.email}`,
+  jobTitle: site.role,
+  address: { '@type': 'PostalAddress', addressLocality: 'Concord', addressRegion: 'CA' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: site.school },
+  knowsLanguage: ['Pashto', 'Persian', 'English'],
+  sameAs: site.links.filter((l) => l.href.startsWith('http')).map((l) => l.href),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="font" type="font/woff2" href={frauncesUrl} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={newsreaderUrl} crossorigin />
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12110e" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="alternate" type="application/rss+xml" title="Notes" href="/rss.xml" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(personSchema)}
+      is:inline
+    />
+    <ClientRouter />
+    <script is:inline>
+      // Applied before paint so an explicit theme choice never flashes.
+      const stored = localStorage.getItem('theme');
+      if (stored) document.documentElement.dataset.theme = stored;
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#main"
+      class="label sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-paper focus:px-3 focus:py-2"
+    >
+      Skip to content
+    </a>
+
+    <Masthead showName={showName} />
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    <Colophon />
+
+    <script>
+      import '../scripts/enhance';
+    </script>
+
+    <script>
+      // Delegated so it survives view transitions — document outlives the body swap.
+      document.addEventListener('click', (event) => {
+        const button = (event.target as HTMLElement | null)?.closest('[data-theme-toggle]');
+        if (!button) return;
+
+        const root = document.documentElement;
+        const isDark =
+          root.dataset.theme === 'dark' ||
+          (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+        const next = isDark ? 'light' : 'dark';
+
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      });
+    </script>
+  </body>
+</html>

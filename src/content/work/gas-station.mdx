@@ -1,0 +1,53 @@
+---
+title: Gas Station Daily Reporting
+summary: 'Operators upload a station''s daily close PDF; the app extracts the numbers, validates the totals against each other, and only lets an approved report reach the dashboard.'
+role: 'Solo. The domain, the schema, the validation rules and every product decision are mine; the implementation was AI-assisted.'
+stack:
+  [
+    'Next.js 16',
+    'TypeScript',
+    'PostgreSQL',
+    'Prisma 7',
+    'Auth.js',
+    'Zod',
+    'pdf-parse',
+    'Vitest',
+  ]
+period: 'July — August 2026'
+status: 'in progress'
+order: 2
+draft: false
+caseStudy: false
+---
+
+{/* Frontmatter is drawn from your README and the repo itself — it's accurate.
+    The prose below is a prompt for you. */}
+
+## The problem
+
+TODO — you have the rarest possible qualification to write this section: you did this
+job. Say what a daily close actually is, what doing it by hand costs, and what goes
+wrong. Write it for someone who has never seen a station's paperwork.
+
+## What I built
+
+TODO — upload, extract, review beside the PDF, correct with an audit trail, resolve
+blocking validations, approve. Only approved reports move the dashboard.
+
+## The hardest part
+
+TODO — **the section that gets you hired.** Candidates, all real, pick one:
+
+- **You chose deterministic parsing over AI, on purpose.** Your README says so
+  explicitly. That's a judgement call worth defending: why a rules engine beats a model
+  when a number has to be right, and what it cost you in flexibility.
+- **The domain model is 59 tables** — tanks, deliveries, card settlement batches, tax
+  mapping rules, monthly reconciliation. How did you keep that from collapsing?
+- **Validation tolerances.** Deciding when totals are "close enough" is a business
+  question wearing an engineering costume.
+- **Multi-tenant roles** — operator above companies, admin within one, plus area and
+  station managers. Getting that wrong leaks one company's numbers to another.
+
+## What I'd change
+
+TODO

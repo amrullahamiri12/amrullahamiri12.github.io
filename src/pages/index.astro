@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import WorkIndex from '../components/WorkIndex.astro';
+import { site } from '../lib/site';
+
+const work = (await getCollection('work'))
+  .filter((entry) => import.meta.env.DEV || !entry.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const notes = (await getCollection('notes'))
+  .filter((entry) => import.meta.env.DEV || !entry.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+---
+
+<Base title={`${site.name} — ${site.role}`} showName={false}>
+  <section class="editorial pt-20 pb-16 sm:pt-28" data-reveal>
+    <h1 class="display text-6xl">{site.name}</h1>
+    <p class="mt-8 max-w-xl text-lg text-ink-soft italic">{site.tagline}</p>
+  </section>
+
+  {/* TODO(amrullah): this is draft copy from your LinkedIn — rewrite it in your voice. */}
+  <section class="editorial pb-24">
+    <div class="measure space-y-5">
+      <p>
+        I&rsquo;m studying computer science at {site.school}, transferring to
+        San&nbsp;José State in Spring 2027, and heading toward {site.focus}. I came to it
+        late and on purpose: before this I spent about a decade doing other work &mdash;
+        closing books as an accountant, interpreting Pashto and English for hospitals and
+        courts, running accounts for a company in Kabul.
+      </p>
+      <p>
+        That&rsquo;s the part I think is worth something. I have been the person on the
+        other end of badly built software, at month-end, with a deadline. It made me
+        particular about the difference between a thing that demos and a thing that holds.
+      </p>
+    </div>
+  </section>
+
+  <section class="editorial pb-20">
+    <h2 class="label">Selected work</h2>
+    <WorkIndex entries={work} />
+  </section>
+
+  {
+    notes.length > 0 && (
+      <section class="editorial pb-8">
+        <h2 class="label">Recent notes</h2>
+        <ul class="mt-6 space-y-4">
+          {notes.map((note) => (
+            <li>
+              <a class="link text-lg" href={`/notes/${note.id}`}>
+                {note.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Base>

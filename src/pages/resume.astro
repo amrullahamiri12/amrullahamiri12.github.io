@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/site';
+import { education, experience, skills, languages, disclosure } from '../lib/resume';
+import type { Role } from '../lib/resume';
+
+const contact = [site.location, site.email, 'github.com/amrullahamiri12', 'linkedin.com/in/amrullah-amiri'];
+---
+
+<Base title="Résumé — Amrullah Amiri">
+  <div class="editorial pt-14 pb-16">
+    <header class="col-wide">
+      <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+        <h1 class="display text-4xl">{site.name}</h1>
+        <p class="label print:hidden">
+          <button type="button" data-print class="cursor-pointer hover:text-accent">
+            Print / save as PDF &rarr;
+          </button>
+        </p>
+      </div>
+      <p class="mt-3 text-ink-soft italic">
+        {site.role} at {site.school}, finishing {site.graduates}, transferring to
+        San&nbsp;José State in Spring 2027. Heading toward {site.focus}.
+      </p>
+      <p class="label mt-4 flex flex-wrap gap-x-5 gap-y-1">
+        {contact.map((item) => <span>{item}</span>)}
+      </p>
+    </header>
+
+    <section class="col-wide mt-12">
+      <h2 class="label border-b border-rule pb-2">Education</h2>
+      {education.map((role: Role) => (
+        <div class="mt-5 break-inside-avoid">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-6">
+            <h3 class="font-display text-xl">{role.org}</h3>
+            <span class="label shrink-0">{role.from} — {role.to}</span>
+          </div>
+          <p class="text-sm text-ink-soft">{role.title} · {role.place}</p>
+          {role.notes && (
+            <ul class="mt-2 space-y-1">
+              {role.notes.map((note) => (
+                <li class="text-sm text-muted">{note}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </section>
+
+    <section class="col-wide mt-12">
+      <h2 class="label border-b border-rule pb-2">Experience</h2>
+      {experience.map((role: Role) => (
+        <div class="mt-5 break-inside-avoid">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-6">
+            <h3 class="font-display text-xl">{role.org}</h3>
+            <span class="label shrink-0">{role.from} — {role.to}</span>
+          </div>
+          <p class="text-sm text-ink-soft">{role.title} · {role.place}</p>
+          {role.notes && (
+            <ul class="mt-2 space-y-1">
+              {role.notes.map((note) => (
+                <li class="text-sm text-muted">{note}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </section>
+
+    <section class="col-wide mt-12 break-inside-avoid">
+      <h2 class="label border-b border-rule pb-2">Technical</h2>
+      <dl class="mt-5 space-y-3">
+        {skills.map((row) => (
+          <div class="flex flex-wrap gap-x-4">
+            <dt class="label w-24 shrink-0">{row.group}</dt>
+            <dd class="text-sm">
+              {row.items.join(' · ')}
+              {'note' in row && <span class="text-muted italic"> — {row.note}</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="measure mt-6 space-y-3 border-l-2 border-rule pl-4 text-sm text-muted">
+        {disclosure.split('\n\n').map((para) => <p>{para}</p>)}
+      </div>
+    </section>
+
+    <section class="col-wide mt-12 break-inside-avoid">
+      <h2 class="label border-b border-rule pb-2">Languages</h2>
+      <dl class="mt-5 space-y-2">
+        {languages.map((lang) => (
+          <div class="flex flex-wrap gap-x-4">
+            <dt class="w-24 shrink-0 font-display text-lg">{lang.name}</dt>
+            <dd class="text-sm text-muted">{lang.level}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement | null)?.closest('[data-print]')) window.print();
+    });
+  </script>
+</Base>

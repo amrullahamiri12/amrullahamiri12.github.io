@@ -1,0 +1,45 @@
+---
+title: Memora
+summary: 'A Quizlet-style study app with Learn, Flashcards and Test modes, plus an admin side for subjects, topics and bulk CSV import.'
+role: 'Solo. Specified, directed, tested and shipped it — built with AI assistance.'
+stack:
+  ['React 19', 'Express 5', 'Prisma', 'SQLite → Postgres', 'JWT + Google OAuth', 'Vercel']
+period: 'June 2026'
+status: 'shipped'
+repo: 'https://github.com/amrullahamiri12/memora'
+live: 'https://memora.cards'
+order: 3
+draft: false
+caseStudy: false
+---
+
+{/* Frontmatter above is pulled from your README and is accurate. Everything below is
+    a prompt for you — I'm not going to invent your reasoning. */}
+
+## The problem
+
+TODO — what was actually broken or missing, in plain language. Why build another
+flashcard app when Quizlet exists?
+
+## What I built
+
+TODO — the shape of it. Three study modes, guest and registered accounts, an admin
+dashboard. Say what mattered and skip the feature list.
+
+## The hardest part
+
+TODO — **this is the section that gets you hired.** Your README points at a real one:
+you run Prisma on Vercel's serverless functions and added raw SQL fast paths for hot
+routes. That's a genuine engineering problem — cold starts, connection pooling, an ORM
+that's expensive in a function that dies after every request.
+
+What did you measure? What was slow, how slow, and how did you find out? What did you
+try before raw SQL? What did dropping to raw SQL cost you in safety or maintainability?
+
+Other candidates if that isn't the real story: email verification gating study writes,
+rate limiting (40 req/15min on auth, 150/min on progress), or the SQLite-to-Postgres
+migration.
+
+## What I'd change
+
+TODO — what you now know that you didn't in June.

@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+
+const scale = [
+  ['6xl', 'text-6xl', 'Amrullah Amiri'],
+  ['5xl', 'text-5xl', 'Selected Work'],
+  ['4xl', 'text-4xl', 'Memora'],
+  ['3xl', 'text-3xl', 'The problem'],
+  ['2xl', 'text-2xl', 'What I built'],
+  ['xl', 'text-xl', 'A subhead sits here'],
+] as const;
+
+const swatches = [
+  ['paper', 'var(--paper)'],
+  ['paper-sunk', 'var(--paper-sunk)'],
+  ['rule', 'var(--rule)'],
+  ['muted', 'var(--muted)'],
+  ['ink-soft', 'var(--ink-soft)'],
+  ['ink', 'var(--ink)'],
+  ['accent', 'var(--accent)'],
+] as const;
+
+const axes = [
+  ["'opsz' 144,'SOFT' 0,'WONK' 1", 'opsz 144 · wonk on'],
+  ["'opsz' 60,'SOFT' 45,'WONK' 0", 'opsz 60 · soft 45'],
+  ["'opsz' 9,'SOFT' 100,'WONK' 0", 'opsz 9 · soft 100'],
+] as const;
+---
+
+<Base title="Specimen — Amrullah Amiri" noindex>
+  <div class="editorial gap-y-20 pt-16 pb-8">
+    <p class="label col-side">Specimen №1</p>
+
+    <!-- The grid itself -->
+    <section>
+      <h2 class="label mb-6">The editorial grid</h2>
+      <p class="measure">
+        This paragraph sits in the main column. The note to its right lives in the side
+        column and is where marginalia will go in the case studies. Below 64rem the two
+        columns collapse into one and the note falls inline, so nothing is stranded on a
+        phone.
+      </p>
+    </section>
+    <aside class="col-side text-sm text-muted">
+      <span class="label mb-2 block">№ 1</span>
+      A side note. On a wide screen it hangs in the outer margin; on a narrow one it
+      simply follows the paragraph.
+    </aside>
+
+    <!-- Scale -->
+    <section class="col-wide border-t border-rule pt-8">
+      <h2 class="label mb-8">The scale</h2>
+      <div class="space-y-6">
+        {scale.map(([name, cls, sample]) => (
+          <div class="flex items-baseline gap-6">
+            <span class="label w-12 shrink-0">{name}</span>
+            <span class={`display ${cls}`}>{sample}</span>
+          </div>
+        ))}
+        <div class="flex items-baseline gap-6">
+          <span class="label w-12 shrink-0">base</span>
+          <span class="text-base">Body copy, set in Newsreader. Weight axis only.</span>
+        </div>
+        <div class="flex items-baseline gap-6">
+          <span class="label w-12 shrink-0">mono</span>
+          <span class="font-mono text-xs tracking-wide">2024 — 2026 · TypeScript · SQLite</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fraunces axes: the reason we chose it -->
+    <section class="col-wide border-t border-rule pt-8">
+      <h2 class="label mb-8">Fraunces, axis by axis</h2>
+      <div class="grid gap-10 sm:grid-cols-3">
+        {axes.map(([settings, caption]) => (
+          <figure>
+            <p class="font-display text-4xl" style={`font-variation-settings:${settings}`}>
+              Agitating
+            </p>
+            <figcaption class="label mt-3">{caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- Prose, with the optical pass switched on -->
+    <section class="border-t border-rule pt-8">
+      <h2 class="label mb-8">Prose &amp; figures</h2>
+      <div class="measure space-y-5">
+        <p>
+          Memora began as a complaint. I had 1,240 flashcards spread across three apps and no
+          way to tell which ones I actually knew. The obvious fix &mdash; spaced repetition &mdash;
+          is a solved problem on paper and a genuinely hard one in a database, because the
+          scheduler has to stay correct when a student reviews 400 cards offline on a bus and
+          syncs six hours later.
+        </p>
+        <p>
+          Notice the numerals above: <span class="font-medium">1,240</span> and <span class="font-medium">400</span>
+          use old-style figures, so they sit on the baseline like lowercase letters instead of
+          shouting. In a table they switch to tabular lining figures, because there the job is
+          alignment, not rhythm.
+        </p>
+        <blockquote class="border-l-2 border-accent pl-5 text-lg text-ink-soft italic">
+          The scheduler has to stay correct when the network isn&rsquo;t.
+        </blockquote>
+        <p>
+          Links look like <a class="link" href="/work">this one</a> &mdash; underlined at a
+          readable offset, thickening on hover rather than changing colour.
+        </p>
+      </div>
+    </section>
+
+    <!-- Palette -->
+    <section class="col-wide border-t border-rule pt-8">
+      <h2 class="label mb-8">Palette</h2>
+      <div class="flex flex-wrap gap-px">
+        {swatches.map(([name, value]) => (
+          <div class="min-w-24 flex-1">
+            <div class="h-20 border border-rule" style={`background:${value}`}></div>
+            <div class="label mt-2">{name}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>

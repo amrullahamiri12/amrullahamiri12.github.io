@@ -1,0 +1,14 @@
+---
+/** Pure-CSS state: the active word is inked without waiting for JS, so it is
+    never wrong on first paint — including when the choice is the system's. */
+---
+<button
+  type="button"
+  data-theme-toggle
+  class="label cursor-pointer transition-opacity duration-200 hover:opacity-70"
+  aria-label="Switch between light and dark"
+>
+  <span class="theme-light">Light</span>
+  <span aria-hidden="true" class="px-1 text-rule">/</span>
+  <span class="theme-dark">Dark</span>
+</button>

@@ -1,0 +1,500 @@
+@import 'tailwindcss';
+
+/* Fraunces carries all four axes (opsz/SOFT/WONK/wght) — they are the display voice
+   and worth their 121KB. Newsreader ships weight-only: its optical-size axis costs
+   148KB across roman + italic and is invisible at 17px body sizes. */
+@import '@fontsource-variable/fraunces/full.css';
+@import '@fontsource-variable/newsreader/wght.css';
+@import '@fontsource-variable/newsreader/wght-italic.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+/* ── Palette ───────────────────────────────────────────────────────────────
+   Warm paper, warm ink. One accent, used at roughly 2% coverage.           */
+:root {
+  --paper:     #fbfaf7;
+  --paper-sunk:#f4f1ea;
+  --ink:       #16150f;
+  --ink-soft:  #3a382f;
+  --muted:     #6b675c;
+  --rule:      #e3dfd5;
+  --accent:    #b4432b;
+  --accent-sunk:#8c3320;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --paper:     #12110e;
+  --paper-sunk:#1b1a16;
+  --ink:       #edeae3;
+  --ink-soft:  #c9c5bb;
+  --muted:     #8d887c;
+  --rule:      #2e2c26;
+  --accent:    #e0714f;
+  --accent-sunk:#f09173;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper:     #12110e;
+    --paper-sunk:#1b1a16;
+    --ink:       #edeae3;
+    --ink-soft:  #c9c5bb;
+    --muted:     #8d887c;
+    --rule:      #2e2c26;
+    --accent:    #e0714f;
+    --accent-sunk:#f09173;
+
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --color-paper: var(--paper);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-sunk: var(--accent-sunk);
+
+  /* Fluid scale, locked between 380px and 1440px viewports. */
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.78125rem;
+  --text-sm: clamp(0.9063rem, 0.8838rem + 0.0943vw, 0.9688rem);
+  --text-base: clamp(1.0625rem, 1.0177rem + 0.1887vw, 1.1875rem);
+  --text-lg: clamp(1.25rem, 1.1828rem + 0.283vw, 1.4375rem);
+  --text-xl: clamp(1.5rem, 1.388rem + 0.4717vw, 1.8125rem);
+  --text-2xl: clamp(1.8125rem, 1.6333rem + 0.7547vw, 2.3125rem);
+  --text-3xl: clamp(2.1875rem, 1.9186rem + 1.1321vw, 2.9375rem);
+  --text-4xl: clamp(2.625rem, 2.2217rem + 1.6981vw, 3.75rem);
+  --text-5xl: clamp(3.125rem, 2.5424rem + 2.4528vw, 4.75rem);
+  --text-6xl: clamp(3.75rem, 2.9434rem + 3.3962vw, 6rem);
+
+  /* One curve for the whole site. */
+  --ease-editorial: cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    hanging-punctuation: first last;
+  }
+
+  /* Old-style figures sit inside prose; tabular figures belong in data. */
+  p, li, blockquote, dd {
+    font-variant-numeric: oldstyle-nums proportional-nums;
+    text-wrap: pretty;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+    font-variant-numeric: lining-nums;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--accent) 22%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ── Typographic utilities ────────────────────────────────────────────── */
+@utility display {
+  font-family: var(--font-display);
+  /* opsz at max: high contrast, tight spacing. WONK on for the true italic-y g/a. */
+  font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 1;
+  font-weight: 400;
+}
+
+@utility display-soft {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 60, 'SOFT' 45, 'WONK' 0;
+}
+
+/* Small caps done properly: real tracking, real weight compensation. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility measure {
+  max-width: 62ch;
+}
+
+@utility rule-hair {
+  border-color: var(--rule);
+  border-top-width: 1px;
+}
+
+@utility link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition:
+    text-decoration-thickness 180ms var(--ease-editorial),
+    text-decoration-color 180ms var(--ease-editorial);
+
+  &:hover {
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--accent);
+  }
+}
+
+/* ── The editorial grid ────────────────────────────────────────────────────
+   One main column for prose plus an outer column for marginalia and folios.
+   Below 64rem the two collapse into one, so side content flows inline.      */
+@layer components {
+  .editorial {
+    --gutter: 1.5rem;
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(var(--gutter), 1fr)
+      [main-start side-start] minmax(0, 40rem)
+      [main-end side-end] minmax(var(--gutter), 1fr)
+      [full-end];
+  }
+
+  .editorial > * {
+    grid-column: main;
+  }
+
+  @media (width >= 64rem) {
+    .editorial {
+      --gutter: 2.5rem;
+      grid-template-columns:
+        [full-start] minmax(var(--gutter), 1fr)
+        [main-start] minmax(0, 38rem)
+        [main-end] 2.5rem
+        [side-start] minmax(0, 15rem)
+        [side-end] minmax(var(--gutter), 1fr)
+        [full-end];
+    }
+  }
+
+  .editorial > .col-side { grid-column: side; }
+  .editorial > .col-full { grid-column: full; }
+  .editorial > .col-wide { grid-column: main-start / side-end; }
+
+  /* Theme switch reflects system preference with no JS, so the label is
+     never wrong on first paint. */
+  .theme-light { color: var(--ink); }
+  .theme-dark { color: var(--muted); }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .theme-light { color: var(--muted); }
+    :root:not([data-theme]) .theme-dark { color: var(--ink); }
+  }
+
+  :root[data-theme='dark'] .theme-light { color: var(--muted); }
+  :root[data-theme='dark'] .theme-dark { color: var(--ink); }
+  :root[data-theme='light'] .theme-light { color: var(--ink); }
+  :root[data-theme='light'] .theme-dark { color: var(--muted); }
+}
+
+/* ── Longform prose ───────────────────────────────────────────────────────
+   Applied to rendered MDX. Spacing is set on the element itself rather than
+   with margin utilities so authors can write plain markdown.               */
+@layer components {
+  .prose-editorial > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose-editorial h2 {
+    font-size: var(--text-2xl);
+    margin-top: 2.4em;
+    margin-bottom: 0.6em;
+  }
+
+  .prose-editorial h3 {
+    font-size: var(--text-xl);
+    margin-top: 1.8em;
+    margin-bottom: 0.4em;
+  }
+
+  .prose-editorial h2 + *,
+  .prose-editorial h3 + * {
+    margin-top: 0;
+  }
+
+  .prose-editorial a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--accent) 55%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: text-decoration-thickness 180ms var(--ease-editorial);
+  }
+
+  .prose-editorial a:hover {
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--accent);
+  }
+
+  .prose-editorial ul,
+  .prose-editorial ol {
+    padding-left: 1.4em;
+  }
+
+  .prose-editorial ul { list-style: none; }
+  .prose-editorial ol { list-style: decimal; }
+
+  .prose-editorial ul > li::before {
+    content: '—';
+    color: var(--accent);
+    display: inline-block;
+    width: 1.4em;
+    margin-left: -1.4em;
+  }
+
+  .prose-editorial li + li { margin-top: 0.4em; }
+
+  .prose-editorial blockquote {
+    border-left: 2px solid var(--accent);
+    padding-left: 1.25rem;
+    font-style: italic;
+    font-size: var(--text-lg);
+    color: var(--ink-soft);
+  }
+
+  .prose-editorial code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--paper-sunk);
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+
+  .prose-editorial pre {
+    background: var(--paper-sunk);
+    padding: 1.15rem 1.35rem;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    font-size: var(--text-sm);
+  }
+
+  .prose-editorial pre code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .prose-editorial hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin-block: 2.5em;
+  }
+
+  .prose-editorial strong { font-weight: 600; }
+}
+
+/* ── Print ────────────────────────────────────────────────────────────────
+   Cmd+P on the résumé or any case study should produce something you'd be
+   happy to hand someone. Same source, typeset for paper.                   */
+@media print {
+  @page {
+    margin: 16mm 15mm;
+  }
+
+  /* Paper is white and ink is black regardless of the reader's theme. */
+  :root,
+  :root[data-theme='dark'],
+  :root[data-theme='light'] {
+    --paper: #ffffff;
+    --paper-sunk: #f4f4f4;
+    --ink: #000000;
+    --ink-soft: #1a1a1a;
+    --muted: #444444;
+    --rule: #bbbbbb;
+    --accent: #000000;
+    --accent-sunk: #000000;
+  }
+
+  html {
+    font-size: 10.5pt;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  /* Screen furniture that means nothing on paper. */
+  header nav,
+  footer,
+  [data-theme-toggle],
+  [data-print],
+  .print-hide {
+    display: none !important;
+  }
+
+  /* The running head keeps the name but loses its rule and padding. */
+  body > header {
+    border: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 6mm;
+  }
+
+  /* The margin column has nowhere to hang on paper — fold it into the text. */
+  .editorial {
+    display: block !important;
+  }
+
+  .editorial > .col-side {
+    margin: 4mm 0 4mm 8mm;
+    border-left: 1px solid var(--rule);
+    padding-left: 4mm;
+    font-size: 9pt;
+  }
+
+  h1, h2, h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  p, li, blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Spell out destinations that a click can't reach on paper. */
+  .prose-editorial a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--muted);
+    word-break: break-all;
+  }
+
+  pre, blockquote, figure, table {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   Everything eases on one curve. Elements only start hidden once JS has
+   confirmed it can reveal them, so a failed script never eats the page.    */
+@layer components {
+  .editorial > .row-1 { grid-row: 1; }
+
+  [data-reveal-ready] [data-reveal] {
+    opacity: 0;
+    transform: translateY(0.6rem);
+    transition:
+      opacity 520ms var(--ease-editorial),
+      transform 520ms var(--ease-editorial);
+  }
+
+  [data-reveal-ready] [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Children stagger by line rather than all arriving together. */
+  [data-reveal-ready] [data-reveal-stagger] > * {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 460ms var(--ease-editorial),
+      transform 460ms var(--ease-editorial);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  [data-reveal-ready] [data-reveal-stagger].is-revealed > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal-ready] [data-reveal],
+    [data-reveal-ready] [data-reveal-stagger] > * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* View transitions: the project title morphs from index to case study. Everything
+   else crossfades on the same curve. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 260ms;
+    animation-timing-function: var(--ease-editorial);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* The folio fades rather than popping, and stays hidden until there is a section
+   to name. Driven by data-state so it never collides with responsive display. */
+@layer components {
+  .folio-inner {
+    transition: opacity 500ms var(--ease-editorial);
+  }
+
+  [data-folio][data-state='before'] .folio-inner,
+  [data-folio][data-state='none'] .folio-inner {
+    opacity: 0;
+  }
+
+  [data-folio][data-state='active'] .folio-inner {
+    opacity: 1;
+  }
+}

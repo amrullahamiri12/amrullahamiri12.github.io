@@ -1,0 +1,20 @@
+---
+/**
+ * A numbered side note. On wide screens it hangs in the outer margin beside the
+ * paragraph it follows; below 64rem it falls inline, indented and ruled.
+ *
+ * Usage inside MDX:  <Marginalia n={1}>Prisma's client is ~40MB cold.</Marginalia>
+ */
+interface Props {
+  n?: number;
+}
+
+const { n } = Astro.props;
+---
+
+<aside
+  class="col-side my-6 border-l-2 border-rule pl-4 text-sm text-muted lg:my-0 lg:border-l-0 lg:pl-0"
+>
+  {n !== undefined && <span class="label mb-1 block">Note {n}</span>}
+  <slot />
+</aside>

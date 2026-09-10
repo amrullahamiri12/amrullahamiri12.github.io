@@ -1,0 +1,47 @@
+---
+import { nav, site, isCurrent } from '../lib/site';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  /** The home page prints its own name at full size, so the running head omits it. */
+  showName?: boolean;
+}
+
+const { showName = true } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<header class="editorial border-b border-rule">
+  <div class="col-wide flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 py-5">
+    <a
+      href="/"
+      class="font-display text-lg tracking-tight transition-colors duration-200 hover:text-accent"
+      style={showName ? undefined : 'visibility:hidden'}
+      aria-hidden={showName ? undefined : 'true'}
+      tabindex={showName ? undefined : -1}
+    >
+      {site.name}
+    </a>
+
+    <nav aria-label="Primary" class="flex flex-wrap items-baseline gap-x-5 gap-y-2 sm:gap-x-6">
+      {
+        nav.map((item) => {
+          const current = isCurrent(path, item.href);
+          return (
+            <a
+              href={item.href}
+              aria-current={current ? 'page' : undefined}
+              class:list={[
+                'label transition-colors duration-200 hover:text-ink',
+                current && 'text-ink underline decoration-accent decoration-1 underline-offset-[0.45em]',
+              ]}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>
