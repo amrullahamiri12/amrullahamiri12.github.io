@@ -78,6 +78,7 @@
   --text-4xl: clamp(2.625rem, 2.2217rem + 1.6981vw, 3.75rem);
   --text-5xl: clamp(3.125rem, 2.5424rem + 2.4528vw, 4.75rem);
   --text-6xl: clamp(3.75rem, 2.9434rem + 3.3962vw, 6rem);
+  --text-7xl: clamp(4.5rem, 3rem + 5.2vw, 7.75rem);
 
   /* One curve for the whole site. */
   --ease-editorial: cubic-bezier(0.2, 0.65, 0.3, 1);
@@ -92,6 +93,11 @@
 
   body {
     background-color: var(--paper);
+    background-image: radial-gradient(
+      ellipse 80% 42% at 18% -8%,
+      color-mix(in oklab, var(--accent) 8%, var(--paper)),
+      var(--paper) 58%
+    );
     color: var(--ink);
     font-family: var(--font-body);
     font-size: var(--text-base);
@@ -164,6 +170,10 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+    .plate img,
+    .plate picture img {
+      transform: none !important;
+    }
   }
 }
 
@@ -217,6 +227,18 @@
   }
 }
 
+/* Publisher's mark in the running head: italic Fraunces, inked in the accent. */
+@utility mark {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 1;
+  font-style: italic;
+  font-size: 1.45rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+
 /* ── The editorial grid ────────────────────────────────────────────────────
    One main column for prose plus an outer column for marginalia and folios.
    Below 64rem the two collapse into one, so side content flows inline.      */
@@ -252,6 +274,61 @@
   .editorial > .col-side { grid-column: side; }
   .editorial > .col-full { grid-column: full; }
   .editorial > .col-wide { grid-column: main-start / side-end; }
+
+  .rule-draw {
+    display: block;
+    height: 2px;
+    width: 2.75rem;
+    background: var(--accent);
+  }
+
+  .plate {
+    overflow: hidden;
+    background: var(--paper-sunk);
+    border: 1px solid var(--rule);
+  }
+
+  .plate img,
+  .plate picture img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: scale(1.015);
+    transform-origin: center;
+    transition: transform 700ms var(--ease-editorial);
+  }
+
+  .group:hover .plate img,
+  .group:hover .plate picture img {
+    transform: scale(1);
+  }
+
+  .work-item {
+    position: relative;
+  }
+
+  .work-item::before {
+    content: '';
+    position: absolute;
+    inset-block: 1.35rem;
+    inset-inline-start: -0.85rem;
+    width: 1.5px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 320ms var(--ease-editorial);
+  }
+
+  .work-item:hover::before,
+  .work-item:focus-visible::before {
+    transform: scaleY(1);
+  }
+
+  @media (width < 40rem) {
+    .work-item::before {
+      display: none;
+    }
+  }
 
   /* Theme switch reflects system preference with no JS, so the label is
      never wrong on first paint. */

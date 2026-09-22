@@ -12,11 +12,11 @@ const lead = metrics?.[0];
 ---
 
 <article class="col-wide" data-reveal>
-  <p class="label">Featured</p>
+  <a href={`/work/${entry.id}`} class="group block">
+    <p class="label">Plate I · Featured</p>
 
-  <a href={`/work/${entry.id}`} class="group mt-5 block">
     <h2
-      class="display text-4xl transition-colors duration-200 group-hover:text-accent"
+      class="display mt-5 text-4xl transition-colors duration-200 group-hover:text-accent lg:text-5xl"
       transition:name={`work-${entry.id}`}
     >
       {title}
@@ -24,28 +24,34 @@ const lead = metrics?.[0];
     <p class="label mt-3">{status} · {period}</p>
     <p class="measure mt-5 text-lg text-ink-soft">{summary}</p>
 
-    {
-      lead && (
-        <p class="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span class="display text-4xl">{lead.value}</span>
-          <span class="label">{lead.label}</span>
-        </p>
-      )
-    }
+    <div class="mt-10 grid items-start gap-6 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-8">
+      {
+        lead && (
+          <p>
+            <span class="display block text-5xl lg:text-6xl">{lead.value}</span>
+            <span class="label mt-2 block max-w-[9rem]">{lead.label}</span>
+          </p>
+        )
+      }
 
-    {
-      cover && (
-        <Image
-          src={cover}
-          alt={coverAlt ?? ''}
-          widths={[720, 1080, 1440]}
-          sizes="(min-width: 64rem) 55rem, 100vw"
-          class="mt-8 w-full border border-rule"
-          loading="eager"
-        />
-      )
-    }
+      {
+        cover && (
+          <figure class="min-w-0">
+            <div class="plate">
+              <Image
+                src={cover}
+                alt={coverAlt ?? ''}
+                widths={[720, 1080, 1440]}
+                sizes="(min-width: 64rem) 42rem, 100vw"
+                class="w-full"
+                loading="eager"
+              />
+            </div>
+          </figure>
+        )
+      }
+    </div>
 
-    <p class="label mt-5 text-accent">Read the study &rarr;</p>
+    <p class="label mt-6 text-accent">Read the study &rarr;</p>
   </a>
 </article>

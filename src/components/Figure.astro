@@ -14,13 +14,15 @@ const { src, alt, caption, wide = false } = Astro.props;
 ---
 
 <figure class:list={['my-10', wide && 'col-wide']}>
-  <Image
-    src={src}
-    alt={alt}
-    widths={[640, 1024, 1440]}
-    sizes="(min-width: 64rem) 55rem, 100vw"
-    class="w-full border border-rule"
-    loading="lazy"
-  />
+  <div class="plate">
+    <Image
+      src={src}
+      alt={alt}
+      widths={[640, 1024, 1440]}
+      sizes="(min-width: 64rem) 55rem, 100vw"
+      class="w-full"
+      loading="lazy"
+    />
+  </div>
   {caption && <figcaption class="label mt-3">{caption}</figcaption>}
 </figure>

@@ -35,7 +35,7 @@ const links = [
     <header class="editorial pt-14 pb-10" data-reveal>
       <p class="label">{status} · {period}</p>
 
-      <h1 class="display mt-4 text-5xl" transition:name={`work-${entry.id}`}>
+      <h1 class="col-wide display mt-5 text-5xl lg:text-6xl" transition:name={`work-${entry.id}`}>
         {title}
       </h1>
 
@@ -43,10 +43,10 @@ const links = [
 
       {
         metrics && metrics.length > 0 && (
-          <dl class="mt-10 flex flex-wrap gap-x-12 gap-y-6 border-t border-rule pt-6">
-            {metrics.map((m) => (
+          <dl class="col-wide mt-10 flex flex-wrap gap-x-12 gap-y-6 border-t border-rule pt-7">
+            {metrics.map((m, i) => (
               <div>
-                <dt class="display text-3xl">{m.value}</dt>
+                <dt class:list={['display', i === 0 ? 'text-4xl' : 'text-3xl']}>{m.value}</dt>
                 <dd class="label mt-1">{m.label}</dd>
               </div>
             ))}
@@ -93,8 +93,8 @@ const links = [
 
   {
     (previous || next) && (
-      <nav class="editorial border-t border-rule pt-8" aria-label="Other projects">
-        <div class="flex flex-wrap justify-between gap-6">
+      <nav class="editorial border-t border-rule pt-10 pb-4" aria-label="Other projects">
+        <div class="col-wide flex flex-wrap justify-between gap-8">
           {previous ? (
             <a class="group" href={`/work/${previous.id}`}>
               <span class="label block">Previous</span>
