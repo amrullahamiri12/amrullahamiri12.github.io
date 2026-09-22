@@ -29,7 +29,7 @@ export const education = [
     from: 'January 2025',
     to: 'December 2026 (expected)',
     place: 'Pittsburg, California',
-    notes: ['Graduated with honors — 4.0 GPA.'],
+    notes: ['Honors; 4.0 GPA.'],
   },
   {
     org: 'Khwaja Abdullah Ansari High School',

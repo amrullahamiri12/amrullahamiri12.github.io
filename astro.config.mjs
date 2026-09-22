@@ -11,6 +11,9 @@ export default defineConfig({
   integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/specimen') })],
   vite: { plugins: [tailwindcss()] },
   markdown: {
-    shikiConfig: { theme: 'vitesse-light', wrap: true },
+    shikiConfig: {
+      themes: { light: 'vitesse-light', dark: 'vitesse-black' },
+      wrap: true,
+    },
   },
 });

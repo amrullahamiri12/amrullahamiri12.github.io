@@ -61,7 +61,7 @@ function initFolio() {
     return;
   }
 
-  const READING_LINE = 140;
+  const READING_LINE = 200;
   let current = -2;
 
   const apply = () => {

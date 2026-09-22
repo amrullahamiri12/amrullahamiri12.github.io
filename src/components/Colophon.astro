@@ -27,6 +27,7 @@ const revised = new Intl.DateTimeFormat('en-GB', {
               class="label transition-colors duration-200 hover:text-accent"
               href={link.href}
               rel={link.href.startsWith('http') ? 'me noopener' : undefined}
+              target={link.href.startsWith('http') ? '_blank' : undefined}
             >
               {link.label}
             </a>

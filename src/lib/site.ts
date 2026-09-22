@@ -45,6 +45,11 @@ export const nav = [
   { label: 'Résumé', href: '/resume' },
 ] as const;
 
+/** Notes stays in the source of truth so a first post is one file away; the masthead hides it until then. */
+export function visibleNav(hasNotes: boolean) {
+  return hasNotes ? nav : nav.filter((item) => item.href !== '/notes');
+}
+
 /** Path comparison that ignores trailing slashes, so /work and /work/ both match. */
 export function isCurrent(pathname: string, href: string): boolean {
   const trim = (s: string) => (s.length > 1 ? s.replace(/\/+$/, '') : s);

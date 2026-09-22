@@ -1,5 +1,6 @@
 ---
-import { nav, site, isCurrent } from '../lib/site';
+import { getCollection } from 'astro:content';
+import { visibleNav, site, isCurrent } from '../lib/site';
 import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
@@ -9,23 +10,33 @@ interface Props {
 
 const { showName = true } = Astro.props;
 const path = Astro.url.pathname;
+const publishedNotes = (await getCollection('notes')).filter(
+  (entry) => import.meta.env.DEV || !entry.data.draft,
+);
+const items = visibleNav(publishedNotes.length > 0);
 ---
 
-<header class="editorial border-b border-rule">
-  <div class="col-wide flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 py-5">
-    <a
-      href="/"
-      class="font-display text-lg tracking-tight transition-colors duration-200 hover:text-accent"
-      style={showName ? undefined : 'visibility:hidden'}
-      aria-hidden={showName ? undefined : 'true'}
-      tabindex={showName ? undefined : -1}
-    >
-      {site.name}
-    </a>
+<header class="editorial sticky top-0 z-40 border-b border-rule bg-paper">
+  <div
+    class:list={[
+      'col-wide flex flex-wrap items-baseline gap-x-8 gap-y-3 py-4',
+      showName ? 'justify-between' : 'justify-start sm:justify-end',
+    ]}
+  >
+    {
+      showName && (
+        <a
+          href="/"
+          class="font-display text-lg tracking-tight transition-colors duration-200 hover:text-accent"
+        >
+          {site.name}
+        </a>
+      )
+    }
 
     <nav aria-label="Primary" class="flex flex-wrap items-baseline gap-x-5 gap-y-2 sm:gap-x-6">
       {
-        nav.map((item) => {
+        items.map((item) => {
           const current = isCurrent(path, item.href);
           return (
             <a

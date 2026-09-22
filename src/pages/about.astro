@@ -6,12 +6,12 @@ import Chronology from '../components/Chronology.astro';
 ---
 
 <Base title="About — Amrullah Amiri">
-  <div class="editorial pt-16 pb-8">
+  <section class="editorial pt-16">
     <h1 class="display text-4xl">About</h1>
+  </section>
 
-    {/* TODO(amrullah): draft copy, accurate but written in my voice, not yours.
-        Rewrite it — this page is you introducing yourself. */}
-    <div class="measure mt-10 space-y-5">
+  <section class="editorial pt-10 pb-8">
+    <div class="measure space-y-5 lg:row-1">
       <p>
         I&rsquo;m a {site.role.toLowerCase()} at {site.school} in {site.location}, finishing
         in {site.graduates}. I&rsquo;m heading toward {site.focus}, and I came to all of
@@ -49,22 +49,7 @@ import Chronology from '../components/Chronology.astro';
       </p>
     </div>
 
-    <section class="col-wide mt-16">
-      <h2 class="label">Chronology</h2>
-      <p class="measure mt-3 text-muted italic">
-        Eleven jobs, four cities, three languages, one degree in progress.
-      </p>
-      <Chronology />
-    </section>
-
-    <section class="measure mt-16 border-t border-rule pt-8">
-      <h2 class="label">How these were built</h2>
-      <div class="mt-4 space-y-5">
-        {disclosure.split('\n\n').map((para) => <p>{para}</p>)}
-      </div>
-    </section>
-
-    <section class="col-side mt-12 lg:mt-0">
+    <aside class="col-side mt-10 border-t border-rule pt-5 lg:row-1 lg:mt-0 lg:border-0 lg:pt-0">
       <h2 class="label">Now</h2>
       <ul class="mt-3 space-y-3 text-sm text-muted">
         {site.now.map((item) => <li>{item}</li>)}
@@ -81,6 +66,25 @@ import Chronology from '../components/Chronology.astro';
           ))
         }
       </dl>
-    </section>
-  </div>
+    </aside>
+  </section>
+
+  <section class="editorial pb-8">
+    <div class="col-wide mt-8">
+      <h2 class="label">Chronology</h2>
+      <p class="measure mt-3 text-muted italic">
+        Eleven jobs, four cities, three languages, one degree in progress.
+      </p>
+      <Chronology />
+    </div>
+  </section>
+
+  <section class="editorial pb-8">
+    <div class="measure mt-8 border-t border-rule pt-8">
+      <h2 class="label">How these were built</h2>
+      <div class="mt-4 space-y-5">
+        {disclosure.split('\n\n').map((para) => <p>{para}</p>)}
+      </div>
+    </div>
+  </section>
 </Base>

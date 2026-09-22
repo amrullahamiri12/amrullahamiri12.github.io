@@ -69,7 +69,12 @@ const links = [
         links.length > 0 && (
           <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
             {links.map((link) => (
-              <a class="label transition-colors duration-200 hover:text-accent" href={link.href} rel="noopener">
+              <a
+                class="label transition-colors duration-200 hover:text-accent"
+                href={link.href}
+                rel="noopener"
+                target="_blank"
+              >
                 {link.label} &rarr;
               </a>
             ))}
@@ -80,7 +85,7 @@ const links = [
 
     <div class="editorial pb-16">
       <FolioRail />
-      <div class="prose-editorial row-1">
+      <div class="prose-editorial lg:row-1">
         <Content components={{ Marginalia }} />
       </div>
     </div>
